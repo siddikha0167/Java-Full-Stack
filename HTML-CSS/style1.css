@@ -1,0 +1,73 @@
+body{
+    background-color: rgb(204, 255, 0);
+    transition: background-color 2s;
+
+
+
+
+   /* position: relative;
+    top: 0cm;*/
+}
+p{
+    transition: transform 20s linear 3s;
+}
+p:hover{
+    background-color: rgb(255, 0, 179);
+    transform: skew(360deg);
+    border-style: groove;
+    border-width: 1cm;
+    border-color: rgb(0, 229, 255);
+}
+
+
+
+img{
+
+    animation:picture 5s ease-in-out 2s infinite;
+
+
+    /*width: 100px;
+    height: 150px;
+    position: absolute;
+    top: 10cm;
+    left: 100px;
+
+
+    margin: 20px 30px 40px 50px;
+    padding: 20px 20px 20px 90px;
+    border-style: dotted;
+    border-color: rgb(45, 0, 128);
+    border-width: 10px;
+    color:red;
+    font-size: 50px*/
+}
+@keyframes picture{
+    0%{
+        transform: translate(0cm,0cm);
+        border-style: groove;
+        border-width: 0.5cm;
+    }
+    50%{
+        transform: translate(10cm,0cm);
+        border-style: dashed; 
+        border-width: 0.5cm;
+    }
+    75%{
+        transform: translate(10cm,10cm);
+        border-style: double;
+        border-width: 0.5cm;
+    }
+    100%{
+        transform: translate(0cm,10cm);
+        border-style: dotted;
+        border-width: 0.5cm;
+    }
+}
+h1{
+    padding: 20px 20px 20px 90px;
+    border-style: dotted;
+    border-color: rgb(45, 0, 128);
+    border-width: 10px;
+    color:red;
+    font-size: 50px;
+}

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siddikha | Software Engineering Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --border: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1f2937;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #312e81 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        header {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #6366f1, #ec4899);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 40px;
+        }
+
+        nav a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 15px;
+            font-weight: 500;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #6366f1, #ec4899);
+            transition: width 0.3s;
+        }
+
+        nav a:hover {
+            color: #fff;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin: 40px auto;
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+            color: #fff;
+            text-align: center;
+            padding: 120px 40px;
+            margin: 40px auto;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(99, 102, 241, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: move 20s linear infinite;
+        }
+
+        @keyframes move {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            margin-bottom: 15px;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 22px;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+            font-weight: 300;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #fff;
+            color: #6366f1;
+            padding: 14px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 1;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            background: #f1f5f9;
+        }
+
+        h2 {
+            color: var(--primary);
+            border-bottom: 3px solid;
+            border-image: linear-gradient(90deg, #6366f1, #ec4899) 1;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+            font-size: 32px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        h3 {
+            color: #6366f1;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.2);
+            border-color: #6366f1;
+        }
+
+        .card h3 {
+            margin-top: 0;
+        }
+
+        .skill-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            margin: 6px 6px 6px 0;
+            font-size: 13px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.3);
+            transition: all 0.3s;
+        }
+
+        .skill-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .project-card {
+            border: 2px solid var(--border);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            transition: all 0.4s;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #6366f1, #ec4899);
+            transform: scaleY(0);
+            transform-origin: top;
+            transition: transform 0.4s;
+        }
+
+        .project-card:hover::before {
+            transform: scaleY(1);
+        }
+
+        .project-card:hover {
+            border-color: #6366f1;
+            box-shadow: 0 15px 40px rgba(99, 102, 241, 0.15);
+            transform: translateX(4px);
+        }
+
+        .project-card h4 {
+            color: #6366f1;
+            margin-bottom: 12px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        table th {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: #fff;
+            padding: 16px;
+            text-align: left;
+            font-weight: 700;
+        }
+
+        table td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        table tr:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .contact-item {
+            text-align: center;
+            padding: 25px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .contact-item:hover {
+            background: linear-gradient(135deg, #e0e7ff, #ddd6fe);
+            border-color: #6366f1;
+            transform: translateY(-5px);
+        }
+
+        .contact-item h4 {
+            color: #6366f1;
+            margin-bottom: 10px;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .contact-item p {
+            margin-top: 10px;
+            color: #64748b;
+            font-weight: 500;
+        }
+
+        .contact-item a {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .contact-item a:hover {
+            color: #ec4899;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            color: #cbd5e1;
+            margin-top: 60px;
+            border-top: 1px solid rgba(99, 102, 241, 0.2);
+            font-weight: 500;
+        }
+
+        .achievement-list {
+            list-style: none;
+        }
+
+        .achievement-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .achievement-list li:hover {
+            padding-left: 30px;
+            color: #6366f1;
+        }
+
+        .achievement-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            nav ul {
+                gap: 20px;
+                font-size: 13px;
+            }
+
+            .hero {
+                padding: 80px 30px;
+            }
+
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            section {
+                padding: 30px 20px;
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .toggle-section {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .toggle-section::after {
+            content: " ▼";
+            transition: transform 0.3s;
+        }
+
+        .toggle-section.collapsed::after {
+            transform: rotate(-90deg);
+        }
+
+        .collapsible {
+            max-height: 1000px;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+
+        .collapsible.collapsed {
+            max-height: 0;
+        }
+
+        p {
+            font-size: 16px;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        strong {
+            color: #1f2937;
+            font-weight: 700;
+        }
+
+        ul, ol {
+            margin-left: 20px;
+        }
+
+        li {
+            margin: 8px 0;
+            color: #475569;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Navigation -->
+    <header>
+        <div class="header-container">
+            <div class="logo">SK</div>
+            <nav>
+                <ul>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#education">Education</a></li>
+                    <li><a href="#skills">Skills</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <div class="hero">
+            <h1>Siddikha</h1>
+            <p>Software Engineer | Full Stack Developer | Problem Solver</p>
+            <a href="#contact" class="cta-button">Get In Touch</a>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="container">
+        <h2>About Me</h2>
+        <p>
+            I am <strong>Siddikha</strong>, a passionate and driven software engineer with a strong foundation in computer science 
+            and information technology. Currently pursuing my B.E. Tech in Computer Science & Engineering from MTIEAT, I am 
+            dedicated to developing innovative solutions and building scalable applications. With a keen interest in full-stack 
+            development, I combine theoretical knowledge with practical problem-solving skills to create impactful software 
+            solutions.
+        </p>
+        <p style="margin-top: 15px;">
+            My journey in software engineering has equipped me with expertise in various programming paradigms, modern development 
+            frameworks, and software design principles. I am enthusiastic about continuous learning and staying updated with 
+            emerging technologies in the industry.
+        </p>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="container">
+        <h2>Education</h2>
+        <div class="card">
+            <h3>B.E. Tech in Computer Science & Engineering</h3>
+            <p><strong>Institution:</strong> MTIEAT (Muffakham Jah College of Engineering and Technology)</p>
+            <p><strong>Current Year:</strong> 3rd Year</p>
+            <p><strong>Status:</strong> Pursuing</p>
+        </div>
+
+        <h3 style="margin-top: 30px;">Academic Performance</h3>
+        <table>
+            <tr>
+                <th>Semester/Subject</th>
+                <th>Marks</th>
+                <th>Grade</th>
+                <th>Performance</th>
+            </tr>
+            <tr>
+                <td>Database Management Systems (DBMS)</td>
+                <td>89</td>
+                <td>A</td>
+                <td>Excellent</td>
+            </tr>
+            <tr>
+                <td>Software Engineering (SE)</td>
+                <td>84</td>
+                <td>A</td>
+                <td>Excellent</td>
+            </tr>
+            <tr>
+                <td>Operating Systems (OS)</td>
+                <td>75</td>
+                <td>B</td>
+                <td>Good</td>
+            </tr>
+            <tr>
+                <td>Probability & Statistics (P&S)</td>
+                <td>97</td>
+                <td>S</td>
+                <td>Outstanding</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="container">
+        <h2>Technical Skills</h2>
+        
+        <h3>Programming Languages</h3>
+        <div>
+            <span class="skill-badge">C++</span>
+            <span class="skill-badge">Python</span>
+            <span class="skill-badge">Java</span>
+            <span class="skill-badge">JavaScript</span>
+            <span class="skill-badge">HTML/CSS</span>
+        </div>
+
+        <h3 style="margin-top: 20px;">Database & Backend</h3>
+        <div>
+            <span class="skill-badge">MySQL</span>
+            <span class="skill-badge">MongoDB</span>
+            <span class="skill-badge">SQL</span>
+            <span class="skill-badge">RESTful APIs</span>
+            <span class="skill-badge">Node.js</span>
+        </div>
+
+        <h3 style="margin-top: 20px;">Frontend & Tools</h3>
+        <div>
+            <span class="skill-badge">React</span>
+            <span class="skill-badge">Bootstrap</span>
+            <span class="skill-badge">Git/GitHub</span>
+            <span class="skill-badge">VS Code</span>
+            <span class="skill-badge">Linux/Terminal</span>
+        </div>
+
+        <h3 style="margin-top: 20px;">Soft Skills</h3>
+        <div>
+            <span class="skill-badge">Problem Solving</span>
+            <span class="skill-badge">Team Collaboration</span>
+            <span class="skill-badge">Communication</span>
+            <span class="skill-badge">Project Management</span>
+            <span class="skill-badge">Debugging & Troubleshooting</span>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="container">
+        <h2>Projects & Experience</h2>
+
+        <div class="project-card">
+            <h4>Hackathon Participation - Innovation Challenge</h4>
+            <p><strong>Event:</strong> Hackathon at Sidhartha College</p>
+            <p><strong>Achievement:</strong> Successfully developed a web-based solution addressing real-world problems through 
+            collaborative problem-solving and innovative thinking.</p>
+            <p><strong>Technologies Used:</strong> HTML, CSS, JavaScript, Python</p>
+            <p><strong>Key Skills Demonstrated:</strong> Rapid prototyping, teamwork, technical implementation, creative problem-solving</p>
+        </div>
+
+        <div class="project-card">
+            <h4>Database Management System Project</h4>
+            <p><strong>Description:</strong> Designed and implemented a comprehensive DBMS solution demonstrating strong understanding 
+            of database design principles, normalization, and query optimization.</p>
+            <p><strong>Technologies:</strong> MySQL, SQL, Database Design Principles</p>
+            <p><strong>Outcome:</strong> Scored 89 marks - Excellent understanding of database concepts</p>
+        </div>
+
+        <div class="project-card">
+            <h4>Software Engineering Coursework</h4>
+            <p><strong>Focus:</strong> Application of software development methodologies, design patterns, and best practices.</p>
+            <p><strong>Concepts Covered:</strong> SDLC, UML diagrams, testing strategies, code quality</p>
+            <p><strong>Result:</strong> Grade A - Strong grasp of software engineering principles</p>
+        </div>
+
+        <div class="project-card">
+            <h4>Current Learning & Development</h4>
+            <p><strong>Focus Areas:</strong></p>
+            <ul class="achievement-list">
+                <li>Full-stack web development with React and Node.js</li>
+                <li>Cloud computing and deployment strategies</li>
+                <li>Advanced data structures and algorithms</li>
+                <li>Artificial Intelligence and Machine Learning concepts</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section class="container">
+        <h2>Key Achievements</h2>
+        <ul class="achievement-list">
+            <li>Outstanding performance in Probability & Statistics (97 marks - Grade S)</li>
+            <li>Strong academic record in core computer science subjects</li>
+            <li>Active participation in hackathons and innovation challenges</li>
+            <li>Proficiency in multiple programming languages and frameworks</li>
+            <li>Demonstrated ability to work in team environments</li>
+            <li>Continuous learner and technology enthusiast</li>
+        </ul>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="container">
+        <h2>Get In Touch</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <h4>📧 Email</h4>
+                <p>siddikha@email.com</p>
+            </div>
+            <div class="contact-item">
+                <h4>📱 Phone</h4>
+                <p>+91-9999-999-999</p>
+            </div>
+            <div class="contact-item">
+                <h4>💼 LinkedIn</h4>
+                <p><a href="#" style="color: #667eea; text-decoration: none;">linkedin.com/in/siddikha</a></p>
+            </div>
+            <div class="contact-item">
+                <h4>🐙 GitHub</h4>
+                <p><a href="#" style="color: #667eea; text-decoration: none;">github.com/siddikha</a></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Siddikha | Software Engineering Student at MTIEAT. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript for Interactivity -->
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Active navigation highlight
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.clientHeight;
+                if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.style.color = '#fff';
+                    });
+                }
+            });
+        });
+
+        // Toggle sections on click (optional feature)
+        document.querySelectorAll('.toggle-section').forEach(element => {
+            element.addEventListener('click', function () {
+                const content = this.nextElementSibling;
+                if (content && content.classList.contains('collapsible')) {
+                    this.classList.toggle('collapsed');
+                    content.classList.toggle('collapsed');
+                }
+            });
+        });
+
+        // Add animation on page load
+        window.addEventListener('load', () => {
+            const cards = document.querySelectorAll('.card, .project-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s ease-out';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+
+        // Contact form submission (basic validation)
+        console.log('Portfolio loaded successfully!');
+    </script>
+</body>
+</html>
