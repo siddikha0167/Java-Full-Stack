@@ -1,0 +1,17 @@
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background:darkmagenta;
+    color: pink;
+}
+ul{
+    display: flex;
+    flex-direction: column;
+    list-style: square;
+    gap: 20px;
+}
+.meat{
+    flex-direction: column;
+    gap: 10px;
+}
