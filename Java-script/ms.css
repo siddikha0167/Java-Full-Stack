@@ -1,0 +1,29 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+#license-details {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+#license-details img {
+    width: 200px;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#license-details .details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#license-details .details p {
+    margin: 0;
+}
