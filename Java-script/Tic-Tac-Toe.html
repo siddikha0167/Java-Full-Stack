@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird Game</title>
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at top, #87ceeb 0%, #50a8d4 45%, #1b6d9b 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+        }
+        .game-shell {
+            width: 400px;
+            padding: 20px;
+            border-radius: 24px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+        .header h1 {
+            font-size: 22px;
+            letter-spacing: 0.5px;
+        }
+        .score {
+            font-size: 20px;
+            font-weight: 700;
+            color: #ffe066;
+        }
+        .canvas-wrapper {
+            position: relative;
+            width: 100%;
+            border-radius: 20px;
+            overflow: hidden;
+            background: linear-gradient(to bottom, #7ad7f0 0%, #5cb8d3 40%, #3f88b0 100%);
+            border: 2px solid rgba(255, 255, 255, 0.14);
+        }
+        canvas {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .controls {
+            margin-top: 18px;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+        .button {
+            width: 100%;
+            padding: 14px 0;
+            border: none;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #fd7e14, #ff9f1a);
+            color: #111827;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.2s ease, filter 0.2s ease;
+        }
+        .button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+        .info {
+            margin-top: 12px;
+            font-size: 14px;
+            color: #f1f1f1;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-shell">
+        <div class="header">
+            <h1>Flappy Bird</h1>
+            <div class="score">Score: <span id="score">0</span></div>
+        </div>
+        <div class="canvas-wrapper">
+            <canvas id="gameCanvas" width="400" height="600"></canvas>
+        </div>
+        <div class="controls">
+            <button class="button" id="startButton">Start Game</button>
+            <button class="button" id="restartButton">Restart</button>
+        </div>
+        <p class="info">Press space or click to flap. Avoid the pipes and beat your high score.</p>
+    </div>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+       
+        const startButton = document.getElementById('startButton');
+        const restartButton = document.getElementById('restartButton');
+
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+        const bird = {
+            x: 80,
+            y: canvasHeight / 2,
+            width: 36,
+            height: 26,
+            velocity: 0,
+            gravity: 0.6,
+            jumpForce: -11,
+            rotation: 0,
+        };
+
+        const pipeWidth = 70;
+        const gapHeight = 150;
+        const pipeSpeed = 2.5;
+        const pipeInterval = 1500;
+
+        let pipes = [];
+        let score = 0;
+        let gameOver = false;
+        let gameStarted = false;
+        let animationId = null;
+        let pipeTimer = null;
+
+        function resetGame() {
+            bird.y = canvasHeight / 2;
+            bird.velocity = 0;
+            bird.rotation = 0;
+            pipes = [];
+            score = 0;
+            gameOver = false;
+            gameStarted = false;
+            scoreEl.textContent = score;
+            clearInterval(pipeTimer);
+            drawScene();
+        }
+
+        function startGame() {
+            if (gameStarted) return;
+            gameStarted = true;
+            gameOver = false;
+            score = 0;
+            scoreEl.textContent = score;
+            pipes = [];
+            bird.y = canvasHeight / 2;
+            bird.velocity = 0;
+            bird.rotation = 0;
+            clearInterval(pipeTimer);
+            pipeTimer = setInterval(createPipe, pipeInterval);
+            createPipe();
+            loop();
+        }
+
+        function createPipe() {
+            const minHeight = 80;
+            const maxHeight = canvasHeight - gapHeight - 120;
+            const topHeight = Math.random() * (maxHeight - minHeight) + minHeight;
+            pipes.push({ x: canvasWidth, y: 0, width: pipeWidth, height: topHeight, passed: false });
+            pipes.push({ x: canvasWidth, y: topHeight + gapHeight, width: pipeWidth, height: canvasHeight - topHeight - gapHeight, passed: false, bottom: true });
+        }
+
+        function drawBackground() {
+            const gradient = ctx.createLinearGradient(0, 0, 0, canvasHeight);
+            gradient.addColorStop(0, '#81d4fa');
+            gradient.addColorStop(0.5, '#67c8f2');
+            gradient.addColorStop(1, '#41a7cf');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        }
+
+        function drawGround() {
+            ctx.fillStyle = '#6f4f2d';
+            ctx.fillRect(0, canvasHeight - 80, canvasWidth, 80);
+            ctx.fillStyle = '#8d6e4a';
+            for (let i = 0; i < canvasWidth; i += 40) {
+                ctx.fillRect(i, canvasHeight - 80, 20, 80);
+            }
+        }
+
+        function drawBird() {
+            ctx.save();
+            ctx.translate(bird.x, bird.y);
+            ctx.rotate((Math.PI / 180) * bird.rotation);
+            ctx.fillStyle = '#ffcb05';
+            ctx.strokeStyle = '#d49c08';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.ellipse(0, 0, bird.width / 2, bird.height / 2, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.fillStyle = '#000';
+            ctx.beginPath();
+            ctx.arc(8, -4, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+
+        function drawPipes() {
+            pipes.forEach(pipe => {
+                ctx.fillStyle = '#2d8f36';
+                ctx.fillRect(pipe.x, pipe.y, pipe.width, pipe.height);
+                ctx.fillStyle = '#22742e';
+                ctx.fillRect(pipe.x, pipe.y + pipe.height - 15, pipe.width, 15);
+                ctx.fillStyle = '#196b29';
+                ctx.fillRect(pipe.x + 10, pipe.y + pipe.height - 30, pipe.width - 20, 15);
+            });
+        }
+
+        function updatePhysics() {
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+            bird.rotation = Math.min(45, bird.velocity * 3);
+
+            if (bird.y + bird.height / 2 >= canvasHeight - 80) {
+                bird.y = canvasHeight - 80 - bird.height / 2;
+                endGame();
+            }
+
+            pipes.forEach((pipe, index) => {
+                pipe.x -= pipeSpeed;
+
+                if (!pipe.passed && pipe.x + pipe.width < bird.x && !pipe.bottom) {
+                    score += 1;
+                    scoreEl.textContent = score;
+                    pipe.passed = true;
+                }
+
+                const birdLeft = bird.x - bird.width / 2;
+                const birdRight = bird.x + bird.width / 2;
+                const birdTop = bird.y - bird.height / 2;
+                const birdBottom = bird.y + bird.height / 2;
+
+                if (
+                    birdRight > pipe.x &&
+                    birdLeft < pipe.x + pipe.width &&
+                    birdBottom > pipe.y &&
+                    birdTop < pipe.y + pipe.height
+                ) {
+                    endGame();
+                }
+
+                if (pipe.x + pipe.width < 0) {
+                    pipes.splice(index, 1);
+                }
+            });
+        }
+
+        function drawScene() {
+            drawBackground();
+            drawPipes();
+            drawGround();
+            drawBird();
+
+            if (!gameStarted) {
+                ctx.fillStyle = 'rgba(0,0,0,0.5)';
+                ctx.fillRect(20, 220, 360, 120);
+                ctx.fillStyle = '#fff';
+                ctx.font = '20px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText('Press Start to play', canvasWidth / 2, 280);
+                ctx.font = '16px Arial';
+                ctx.fillText('Click or press space to flap', canvasWidth / 2, 315);
+            }
+        }
+
+        function loop() {
+            if (gameOver) {
+                cancelAnimationFrame(animationId);
+                return;
+            }
+            updatePhysics();
+            drawScene();
+            animationId = requestAnimationFrame(loop);
+        }
+
+        function flap() {
+            if (!gameStarted) return;
+            if (gameOver) return;
+            bird.velocity = bird.jumpForce;
+        }
+
+        function endGame() {
+            gameOver = true;
+            clearInterval(pipeTimer);
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.fillRect(20, 240, 360, 120);
+            ctx.fillStyle = '#fff';
+            ctx.font = '24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('Game Over', canvasWidth / 2, 290);
+            ctx.font = '18px Arial';
+            ctx.fillText(`Final Score: ${score}`, canvasWidth / 2, 330);
+        }
+
+        window.addEventListener('keydown', event => {
+            if (event.code === 'Space') {
+                event.preventDefault();
+                if (!gameStarted) startGame();
+                flap();
+            }
+        });
+
+        window.addEventListener('mousedown', () => {
+            if (!gameStarted) startGame();
+            flap();
+        });
+
+        startButton.addEventListener('click', startGame);
+        restartButton.addEventListener('click', resetGame);
+
+        drawScene();
+    </script>
+</body>
+</html>
